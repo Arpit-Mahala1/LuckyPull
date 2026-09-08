@@ -414,6 +414,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 261060950}
+  - component: {fileID: 261060951}
   m_Layer: 0
   m_Name: CreditsManager
   m_TagString: Untagged
@@ -436,6 +437,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &261060951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261060949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3c366758a7d0e40813be353b553f11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CreditsManager
+  startingBalance: 1000
+  betTiers: 0a0000003200000064000000
 --- !u!1 &283912255
 GameObject:
   m_ObjectHideFlags: 0
@@ -480,7 +495,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 283912255}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
@@ -494,7 +509,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 283912255}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
   m_Name: 
@@ -845,8 +860,8 @@ MonoBehaviour:
   symbolCellHeight: 125
   stripLengthMultiplier: 4
   visibleSymbolCount: 3
-  steadyScrollSpeed: 1800
-  easeDuration: 0.5
+  steadyScrollSpeed: 800
+  easeDuration: 1.3
   spinEaseCurve:
     serializedVersion: 2
     m_Curve:
@@ -871,6 +886,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  symbolSpacing: 6
 --- !u!1 &463725668
 GameObject:
   m_ObjectHideFlags: 0
@@ -1879,6 +1895,64 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 776577377}
   m_CullTransparentMesh: 1
+--- !u!1 &787241907
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 787241909}
+  - component: {fileID: 787241908}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &787241908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787241907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2da3c99f8aadc44b90bb2eadb1ab848, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIManager
+  creditsManager: {fileID: 261060951}
+  slotMachineManager: {fileID: 1419448393}
+  leverController: {fileID: 209194068}
+  balanceText: {fileID: 283916927}
+  betAmountText: {fileID: 1987352200}
+  winText: {fileID: 764910603}
+  betPlusButton: {fileID: 500688125}
+  betMinusButton: {fileID: 318338610}
+  popupRoot: {fileID: 1683967930}
+  popupTitleText: {fileID: 1421452650}
+  popupMessageText: {fileID: 1864348893}
+  popupYesButton: {fileID: 776577379}
+  popupNoButton: {fileID: 601033171}
+  popupCloseButton: {fileID: 1079821068}
+--- !u!4 &787241909
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787241907}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1260.7898, y: 600.92664, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &864414632
 GameObject:
   m_ObjectHideFlags: 0
@@ -2071,8 +2145,8 @@ MonoBehaviour:
   symbolCellHeight: 125
   stripLengthMultiplier: 4
   visibleSymbolCount: 3
-  steadyScrollSpeed: 1800
-  easeDuration: 0.5
+  steadyScrollSpeed: 800
+  easeDuration: 1.3
   spinEaseCurve:
     serializedVersion: 2
     m_Curve:
@@ -2097,6 +2171,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  symbolSpacing: 6
 --- !u!1 &1031329566
 GameObject:
   m_ObjectHideFlags: 0
@@ -2744,6 +2819,62 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1419448392
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1419448394}
+  - component: {fileID: 1419448393}
+  m_Layer: 0
+  m_Name: SlotMachineManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1419448393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419448392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22e306e283c3dcf48b0aa8afab6faa1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SlotMachineManager
+  reels:
+  - {fileID: 2145393511}
+  - {fileID: 439907215}
+  - {fileID: 983645210}
+  allSymbols:
+  - {fileID: 11400000, guid: 3e81d5b33fb582f4cb0f02b970375302, type: 2}
+  - {fileID: 11400000, guid: 3188d34715c86a048b4945ca836effb3, type: 2}
+  - {fileID: 11400000, guid: 4da808ce173da144f9a86dd7550f2763, type: 2}
+  - {fileID: 11400000, guid: bdc59238f94d53546ad707438b2fd203, type: 2}
+  baseSpinDuration: 2
+  perReelStopStagger: 0.3
+  cherryConsolationMultiplier: 0.5
+--- !u!4 &1419448394
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419448392}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1260.7898, y: 600.92664, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1421452648
 GameObject:
   m_ObjectHideFlags: 0
@@ -2915,7 +3046,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0.000030517578, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1453310508
@@ -2925,7 +3056,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1453310506}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
@@ -2939,7 +3070,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1453310506}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
   m_Name: 
@@ -3002,7 +3133,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1588470343}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
@@ -3016,7 +3147,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1588470343}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
   m_Name: 
@@ -3872,8 +4003,8 @@ MonoBehaviour:
   symbolCellHeight: 125
   stripLengthMultiplier: 4
   visibleSymbolCount: 3
-  steadyScrollSpeed: 1800
-  easeDuration: 0.5
+  steadyScrollSpeed: 800
+  easeDuration: 1.3
   spinEaseCurve:
     serializedVersion: 2
     m_Curve:
@@ -3898,6 +4029,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  symbolSpacing: 6
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -3907,3 +4039,5 @@ SceneRoots:
   - {fileID: 1714126247}
   - {fileID: 1163870690}
   - {fileID: 261060950}
+  - {fileID: 1419448394}
+  - {fileID: 787241909}

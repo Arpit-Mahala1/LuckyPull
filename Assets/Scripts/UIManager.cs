@@ -113,7 +113,7 @@ public class UIManager : MonoBehaviour
     /// <summary>Updates the balance display, and prompts to reset if the player can no longer afford the current bet.</summary>
     private void HandleBalanceChanged(int newBalance)
     {
-        balanceText.text = newBalance.ToString();
+        balanceText.text = $"BALANCE: {newBalance}";
 
         if (newBalance < creditsManager.CurrentBet && !_isShowingOutOfCreditsPopup)
         {
@@ -126,7 +126,7 @@ public class UIManager : MonoBehaviour
     private void HandleBetChanged(int newBetIndex, int newBetAmount)
     {
         _lastKnownBetIndex = newBetIndex;
-        betAmountText.text = newBetAmount.ToString();
+        betAmountText.text = $"BET:{newBetAmount}";
 
         // Index 0 is always the lowest tier, so this bound is known for certain. The upper
         // bound isn't known here (CreditsManager doesn't expose the tier count), so plusButton
@@ -192,10 +192,13 @@ public class UIManager : MonoBehaviour
     {
         if (!isWin)
         {
+            winText.gameObject.SetActive(false);
             return;
         }
 
         creditsManager.AwardPayout(payoutAmount);
+        winText.text = $"WIN: {Mathf.RoundToInt(payoutAmount)}";
+        winText.gameObject.SetActive(true);
         ShowWinPopup(payoutAmount);
     }
 
@@ -205,6 +208,7 @@ public class UIManager : MonoBehaviour
         leverController.SetInteractable(false);
         betPlusButton.interactable = false;
         betMinusButton.interactable = false;
+        winText.gameObject.SetActive(false);
     }
 
     /// <summary>Re-enables the lever and bet buttons once the spin has fully resolved.</summary>

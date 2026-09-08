@@ -51,6 +51,9 @@ public class ReelController : MonoBehaviour
     [Tooltip("Normalized (0-1 time in, 0-1 progress out) easing curve applied while decelerating into the resting position.")]
     [SerializeField] private AnimationCurve spinEaseCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
+    [Tooltip("Extra vertical gap, in UI units, added between adjacent symbol centers on top of symbolCellHeight.")]
+    [SerializeField] private float symbolSpacing = 0f;
+
     /// <summary>Fired once the Spin coroutine has finished and the reel is at rest.</summary>
     public event Action OnReelStopped;
 
@@ -107,7 +110,7 @@ public class ReelController : MonoBehaviour
         {
             stripOrder.Add(GetRandomWeightedSymbol());
         }
-
+        float stepDistance = symbolCellHeight + symbolSpacing;
         // Instantiate and lay out the strip, top to bottom, each symbolCellHeight apart.
         for (int i = 0; i < stripOrder.Count; i++)
         {
@@ -117,14 +120,16 @@ public class ReelController : MonoBehaviour
             symbolImage.name = $"Symbol_{i:D3}_{stripOrder[i].symbolName}";
 
             RectTransform symbolRect = symbolImage.rectTransform;
-            symbolRect.anchoredPosition = new Vector2(symbolRect.anchoredPosition.x, -i * symbolCellHeight);
+            
+            symbolRect.anchoredPosition = new Vector2(symbolRect.anchoredPosition.x, i * stepDistance);
             symbolRect.sizeDelta = new Vector2(symbolRect.sizeDelta.x, symbolCellHeight);
 
             _stripSymbols.Add(symbolImage);
         }
 
+        int centerOffsetRows = (visibleSymbolCount - 1) / 2; // 1 for a 3-symbol window
         // The container position that puts the target symbol exactly on the reference line (parent-space Y = 0).
-        _restingAnchoredY = _targetChildIndex * symbolCellHeight;
+        _restingAnchoredY = -(_targetChildIndex + centerOffsetRows + 0.25f) * stepDistance;
 
         // Start every freshly-prepared strip from a known position: its topmost filler symbol on the reference line.
         symbolStripContainer.anchoredPosition = new Vector2(symbolStripContainer.anchoredPosition.x, 0f);
@@ -153,14 +158,14 @@ public class ReelController : MonoBehaviour
         while (steadyPhaseElapsed < steadyPhaseDuration)
         {
             float deltaY = steadyScrollSpeed * Time.deltaTime;
-            symbolStripContainer.anchoredPosition += new Vector2(0f, deltaY);
+            symbolStripContainer.anchoredPosition -= new Vector2(0f, deltaY);
 
             steadyPhaseElapsed += Time.deltaTime;
             yield return null;
         }
 
         float steadyPhaseDistance = steadyScrollSpeed * steadyPhaseDuration;
-        if (steadyPhaseDistance >= _restingAnchoredY)
+        if (steadyPhaseDistance >= Mathf.Abs(_restingAnchoredY))
         {
             // The steady phase already scrolled at or past the target's resting position, so the
             // ease-out below has to move backward to land correctly. The reel will still stop on
