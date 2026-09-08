@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5eb3b63361009a746a6bd3fbb5716fe4, type: 3}
+  m_Name: Symbol_Seven
+  m_EditorClassIdentifier: Assembly-CSharp::SymbolData
+  symbolName: 7
+  symbolSprite: {fileID: 2193077994593488821, guid: 728cb68d83585f042a11cb4f93433553, type: 3}
+  weight: 1
+  payoutMultiplier: 10
