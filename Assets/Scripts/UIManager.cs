@@ -53,8 +53,6 @@ public class UIManager : MonoBehaviour
     [Tooltip("Shown only for the out-of-credits confirmation popup.")]
     [SerializeField] private Button popupNoButton;
 
-    [Tooltip("Shown only for the win popup.")]
-    [SerializeField] private Button popupCloseButton;
 
     // The most recent bet tier index reported by OnBetChanged. Used to decide whether
     // betMinusButton should be interactable (index 0 is always the lowest tier), since
@@ -79,13 +77,16 @@ public class UIManager : MonoBehaviour
         betMinusButton.onClick.AddListener(HandleBetMinusClicked);
         popupYesButton.onClick.AddListener(HandleConfirmResetYesClicked);
         popupNoButton.onClick.AddListener(HandleConfirmResetNoClicked);
-        popupCloseButton.onClick.AddListener(HandlePopupCloseClicked);
 
         // Initialize the HUD from current values directly, rather than relying on the
         // Start()-time events CreditsManager fires itself — script execution order between
         // different components' Start() calls isn't guaranteed, so this is the safe path.
         HandleBalanceChanged(creditsManager.CurrentBalance);
         HandleBetChanged(_lastKnownBetIndex, creditsManager.CurrentBet);
+
+        // A run is considered "settled" at startup, so this is a valid point to check
+        // affordability and set the lever's initial state accordingly.
+        CheckAffordability();
 
         winText.gameObject.SetActive(false);
         popupRoot.SetActive(false);
@@ -103,23 +104,17 @@ public class UIManager : MonoBehaviour
         betMinusButton.onClick.RemoveListener(HandleBetMinusClicked);
         popupYesButton.onClick.RemoveListener(HandleConfirmResetYesClicked);
         popupNoButton.onClick.RemoveListener(HandleConfirmResetNoClicked);
-        popupCloseButton.onClick.RemoveListener(HandlePopupCloseClicked);
     }
 
     // ---------------------------------------------------------------------
     // CreditsManager event handlers
     // ---------------------------------------------------------------------
 
-    /// <summary>Updates the balance display, and prompts to reset if the player can no longer afford the current bet.</summary>
+    /// <summary>Updates the balance display. Affordability is deliberately NOT checked here —
+    /// see CheckAffordability's summary for why.</summary>
     private void HandleBalanceChanged(int newBalance)
     {
         balanceText.text = $"BALANCE: {newBalance}";
-
-        if (newBalance < creditsManager.CurrentBet && !_isShowingOutOfCreditsPopup)
-        {
-            leverController.SetInteractable(false);
-            ShowConfirmResetPopup();
-        }
     }
 
     /// <summary>Updates the bet display and the bet buttons' availability.</summary>
@@ -134,6 +129,11 @@ public class UIManager : MonoBehaviour
         // out we're already at the top tier.
         betMinusButton.interactable = newBetIndex > 0;
         betPlusButton.interactable = true;
+
+        // A bet change is a settled moment (no spin in progress), so it's safe to re-check
+        // affordability here — e.g. lowering the bet after being locked out should
+        // immediately re-enable the lever if the new bet is affordable.
+        CheckAffordability();
     }
 
     // ---------------------------------------------------------------------
@@ -199,7 +199,6 @@ public class UIManager : MonoBehaviour
         creditsManager.AwardPayout(payoutAmount);
         winText.text = $"WIN: {Mathf.RoundToInt(payoutAmount)}";
         winText.gameObject.SetActive(true);
-        ShowWinPopup(payoutAmount);
     }
 
     /// <summary>Locks out the lever and bet buttons while the reels are spinning.</summary>
@@ -214,26 +213,44 @@ public class UIManager : MonoBehaviour
     /// <summary>Re-enables the lever and bet buttons once the spin has fully resolved.</summary>
     private void HandleSpinFullyResolved()
     {
-        leverController.SetInteractable(creditsManager.CanAffordCurrentBet);
         betPlusButton.interactable = true;
         betMinusButton.interactable = _lastKnownBetIndex > 0;
+
+        // The spin (and any payout it awarded) has now fully settled, so this is the correct
+        // moment to check affordability for the *next* bet — not mid-spin, where a win could
+        // still cover it. See CheckAffordability's summary for the full reasoning.
+        CheckAffordability();
     }
 
     // ---------------------------------------------------------------------
     // Popup
     // ---------------------------------------------------------------------
 
-    /// <summary>Configures and shows the popup in its "you won" state, with only the close button visible.</summary>
-    private void ShowWinPopup(float payoutAmount)
+    /// <summary>
+    /// Checks whether the player can afford the current bet and reacts accordingly —
+    /// re-enabling the lever (and dismissing the out-of-credits popup if it's showing) when
+    /// affordable, or locking the lever out and prompting a reset when not. Only ever called
+    /// at points where a run is fully settled (startup, a bet change, or a spin that has fully
+    /// resolved) — never from HandleBalanceChanged directly, since TryDeductBet fires
+    /// OnBalanceChanged the instant a bet is placed, before the spin has had any chance to
+    /// win enough to cover the next bet. Checking there caused the popup to incorrectly pop
+    /// up mid-spin even when the very same spin was about to resolve as a win.
+    /// </summary>
+    private void CheckAffordability()
     {
-        popupTitleText.text = "You Win!";
-        popupMessageText.text = $"You won {Mathf.RoundToInt(payoutAmount)} credits!";
-
-        popupYesButton.gameObject.SetActive(false);
-        popupNoButton.gameObject.SetActive(false);
-        popupCloseButton.gameObject.SetActive(true);
-
-        popupRoot.SetActive(true);
+        if (creditsManager.CanAffordCurrentBet)
+        {
+            leverController.SetInteractable(true);
+            if (_isShowingOutOfCreditsPopup)
+            {
+                HidePopup();
+            }
+        }
+        else if (!_isShowingOutOfCreditsPopup)
+        {
+            leverController.SetInteractable(false);
+            ShowConfirmResetPopup();
+        }
     }
 
     /// <summary>Configures and shows the popup in its "out of credits" confirmation state, with only Yes/No visible.</summary>
@@ -244,7 +261,6 @@ public class UIManager : MonoBehaviour
 
         popupYesButton.gameObject.SetActive(true);
         popupNoButton.gameObject.SetActive(true);
-        popupCloseButton.gameObject.SetActive(false);
 
         popupRoot.SetActive(true);
         _isShowingOutOfCreditsPopup = true;

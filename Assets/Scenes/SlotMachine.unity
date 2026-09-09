@@ -1329,8 +1329,8 @@ RectTransform:
   - {fileID: 606906229}
   m_Father: {fileID: 125740190}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.2, y: 0.33}
-  m_AnchorMax: {x: 0.8, y: 0.45}
+  m_AnchorMin: {x: 0.2, y: 0.15}
+  m_AnchorMax: {x: 0.8, y: 0.35}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1808,8 +1808,8 @@ RectTransform:
   - {fileID: 137066494}
   m_Father: {fileID: 125740190}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.2, y: 0.5}
-  m_AnchorMax: {x: 0.8, y: 0.62}
+  m_AnchorMin: {x: 0.2, y: 0.4}
+  m_AnchorMax: {x: 0.8, y: 0.6}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1937,7 +1937,6 @@ MonoBehaviour:
   popupMessageText: {fileID: 1864348893}
   popupYesButton: {fileID: 776577379}
   popupNoButton: {fileID: 601033171}
-  popupCloseButton: {fileID: 1079821068}
 --- !u!4 &787241909
 Transform:
   m_ObjectHideFlags: 0
@@ -2267,7 +2266,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1079821067
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3197,10 +3196,10 @@ RectTransform:
   - {fileID: 125740190}
   m_Father: {fileID: 1714126247}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.775, y: 0.4}
+  m_AnchorMin: {x: 0.775, y: 0.5}
   m_AnchorMax: {x: 0.95, y: 0.75}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -54}
+  m_SizeDelta: {x: 0, y: 108}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1714126243
 GameObject:
