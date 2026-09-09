@@ -7,7 +7,7 @@ A 3-reel, single-payline slot machine built in Unity 6000.3.10f1. Pull the lever
 | | | |
 |---|---|---|
 | ![Idle machine](docs/screenshots/idle.png) | ![Cherries win](docs/screenshots/win-cherries.png) | ![Bell jackpot win](docs/screenshots/win-jackpot.png) |
-| Idle | Cherries win (2x) | Jackpot — Triple 7 (10x) |
+| Idle | Cherries win (2x) | Jackpot — Triple Bell (3x) |
 
 ## Gameplay Preview
 
