@@ -62,6 +62,7 @@ public class UIManager : MonoBehaviour
     // True while the out-of-credits popup is up, so repeated OnBalanceChanged calls while
     // the balance stays below the current bet don't try to show it again on top of itself.
     private bool _isShowingOutOfCreditsPopup;
+    private bool _isGameOver;
 
     private void Start()
     {
@@ -142,6 +143,7 @@ public class UIManager : MonoBehaviour
 
     private void HandleBetPlusClicked()
     {
+        if (_isGameOver) return;
         bool changed = creditsManager.IncreaseBet();
         if (!changed)
         {
@@ -152,6 +154,7 @@ public class UIManager : MonoBehaviour
 
     private void HandleBetMinusClicked()
     {
+        if (_isGameOver) return;
         bool changed = creditsManager.DecreaseBet();
         if (!changed)
         {
@@ -238,6 +241,11 @@ public class UIManager : MonoBehaviour
     /// </summary>
     private void CheckAffordability()
     {
+        if (_isGameOver)
+        {
+            return;
+        }
+
         if (creditsManager.CanAffordCurrentBet)
         {
             leverController.SetInteractable(true);
@@ -270,22 +278,52 @@ public class UIManager : MonoBehaviour
     {
         creditsManager.ResetBalance();
         HidePopup();
+        CheckAffordability();
     }
 
     private void HandleConfirmResetNoClicked()
     {
-        // Player declined to reset; leave the lever disabled since they still can't afford a spin.
-        HidePopup();
+        // Player declined to reset — end the game for good. Lock every control, and show a
+        // permanent game-over message so it's visually obvious the game has stopped (rather
+        // than just silently hiding the popup and leaving dimmed controls with no explanation).
+        _isGameOver = true;
+        leverController.SetInteractable(false);
+        betPlusButton.interactable = false;
+        betMinusButton.interactable = false;
+
+        ShowGameOverPopup();
     }
 
-    private void HandlePopupCloseClicked()
+    /// <summary>Configures and shows the popup in its permanent "game over" state — no buttons,
+    /// stays on screen. Used once the player has declined to reset after running out of credits.</summary>
+    private void ShowGameOverPopup()
     {
-        HidePopup();
+        popupTitleText.text = "Game Over";
+        popupMessageText.text = "Out of credits. Reload the scene to play again.";
+
+        popupYesButton.gameObject.SetActive(false);
+        popupNoButton.gameObject.SetActive(false);
+
+        popupRoot.SetActive(true);
+        _isShowingOutOfCreditsPopup = false;
+
+        QuitGame();
     }
 
     private void HidePopup()
     {
         popupRoot.SetActive(false);
         _isShowingOutOfCreditsPopup = false;
+    }
+
+    /// <summary>Exits the application. In the Unity Editor this stops Play Mode instead, since
+    /// Application.Quit() is a no-op there — it only takes effect in an actual build.</summary>
+    private void QuitGame()
+    {
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
     }
 }
